@@ -1,16 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select a Major</title>
-</head>
-<body>
-    <h1>Select a Major</h1>
-    <button id="citButton">CIT Majors</button>
-    <button id="busButton">Business Majors</button>
-    <p>We filter our dataset by major</p>
-    <div id="output"></div>
-</body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Data</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  </head>
+
+  <body>
+    <div>
+      <h2>Student Data</h2>
+
+      <div>    
+        <button type="button" onClick="getData('CIT')">CIT Majors</button>
+        <button type="button" onClick="getData('BUS')">Business Majors</button>
+      </div>
+
+      <div id="studentTable"></div>
+    </div>
+
+    <!-- Handlebars template -->
+    <script type="text/x-handlebars-template" id="studentTemplate">
+      <table>
+        <tr><th>Name</th><th>Major</th><th>Midterm Score</th><th>Final Score</th></tr>
+        {{#each rows}}
+          <tr>
+            <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </script>
+
+    <script>
+      function getData(major) {
+        $.ajax({
+          url: 'cit5students.json',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            var filteredData = data.filter(student => student.major === major);
+            var source = document.getElementById('studentTemplate').innerHTML;
+            var template = Handlebars.compile(source);
+            var context = { rows: filteredData };
+            var html = template(context);
+            document.getElementById('studentTable').innerHTML = html;
+          },
+          error: function() {
+            alert('Failed to load student data.');
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
+
 
