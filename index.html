@@ -1,74 +1,69 @@
 <!DOCTYPE html>
-<html><head><title>Speeding Tickets</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
+<html>
+<head>
+    <title>Speeding Tickets</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
- 
+
 <div class="container">
-<nav class=""navbar navbar-inverse">
+    <nav class="navbar navbar-inverse"> <!-- Corrected navbar class -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Our Website</a>
+        </div>
+        <div>
+            <ul>
+                <li class="active"><a href="index.html">All Tickets</a></li>
+                <li><a href="25over.html">25mph or more over</a></li> <!-- Added missing closing tag -->
+            </ul>
+        </div>
+    </nav>
 
-<div class ="navbar-header">
-  <a class ="navbar-brand" href ="#">Our Website</a>
-</div>
- <div>
-   <ul>
-    <li class="active"><a href="index.html">All Tickets</a></li>
-    <li><a href="25over.html">25mph or more over</li>
-   </ul>
- </div>
-</nav>
-
-<div id="ticketApp">
-
-
-     <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
- 
-          <table class="table table-bordered table-striped">
-              <tr>
-                  <th>Ticket ID</th>
-                  <th>Time</th>
-                  <th>Posted Speed</th>
-                  <th>MPH Over</th>
-                  <th>Violator Sex</th>
-              </tr>
-              <tr v-for = "ticket in tickets">
-                  <td>{{ticket.tid}}</td>
-                  <td>{{ticket.stop_time}}</td>
-                  <td>{{ticket.posted_speed}}</td>
-                  <td>{{ticket.speed - ticket.posted_speed}}</td>
-                  <td>{{ticket.Violator_sex}}</td>
-              </tr>
-         </table>
-  
-
-</div>   <!-- ticketsApp -->
-</div>   <!-- end class= 'container' -->
+    <div id="ticketApp"> <!-- Corrected id to match Vue mount point -->
+        <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Ticket ID</th>
+                <th>Time</th>
+                <th>Posted Speed</th>
+                <th>MPH Over</th>
+                <th>Violator Sex</th>
+            </tr>
+            <tr v-for="ticket in tickets">
+                <td>{{ticket.tid}}</td>
+                <td>{{ticket.stop_time}}</td>
+                <td>{{ticket.posted_speed}}</td>
+                <td>{{ticket.actual_speed - ticket.posted_speed}}</td> <!-- Corrected formula for speed difference -->
+                <td>{{ticket.violator_sex}}</td> <!-- Corrected property name -->
+            </tr>
+        </table>
+    </div> <!-- End of ticketApp div -->
+</div> <!-- End of container -->
 
 <script>
-
 let app = Vue.createApp({
-            data() {     // returns an object of data
-                return {
-                    tickets: [],           // array to hold student data
-                }
-            },
-            created() {      // section executes as page loads
-                this.getData()  // load json data as page loads
-            },
-            methods: {    // ajax request
-                async getData() {
-                    const response = await fetch('tickets1.json')
-                    this.tickets = await response.json()
-                },
-            }
-          })
-      
-          app.mount('#ticketsApp')   //in which div to mount the vue app
+    data() {     
+        return {
+            tickets: [],           // array to hold ticket data
+        }
+    },
+    created() {      
+        this.getData()  // Load JSON data as page loads
+    },
+    methods: {    
+        async getData() {
+            const response = await fetch('tickets1.json')
+            this.tickets = await response.json()  // Assign data to tickets array
+        },
+    }
+})
 
+app.mount('#ticketApp')   <!-- Corrected mount point -->
 </script>
-</body></html>
+
+</body>
+</html>
 
