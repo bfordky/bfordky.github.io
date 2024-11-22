@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>25+ Over Speeding Tickets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25mph or More Over</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -9,21 +11,23 @@
 </head>
 <body>
 
-<div class="container">
-    <nav class="navbar navbar-inverse">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Our Website</a>
-        </div>
-        <div>
-            <ul>
-                <li><a href="index.html">All Tickets</a></li>
-                <li class="active"><a href="25over.html">25mph or more over</a></li>
-            </ul>
-        </div>
-    </nav>
+<!-- Navbar -->
+<nav class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Our Website</a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="index.html">All Tickets</a></li>
+            <li class="active"><a href="25over.html">25mph or more over</a></li>
+        </ul>
+    </div>
+</nav>
 
+<!-- Main Content -->
+<div class="container">
     <div id="ticketApp">
-        <h2>Tickets with 25mph or More Over the Limit - July 4, 2014, Minneapolis/St. Paul</h2>
+        <h2>Tickets Over 25mph Over the Speed Limit - July 4, 2014</h2>
         <table class="table table-bordered table-striped">
             <tr>
                 <th>Ticket ID</th>
@@ -32,44 +36,43 @@
                 <th>MPH Over</th>
                 <th>Violator Sex</th>
             </tr>
-            <tr v-for="ticket in filteredTickets">
-                <td>{{ticket.tid}}</td>
-                <td>{{ticket.stop_time}}</td>
-                <td>{{ticket.posted_speed}}</td>
-                <td>{{ticket.actual_speed - ticket.posted_speed}}</td>
-                <td>{{ticket.violator_sex}}</td>
+            <tr v-for="ticket in filteredTickets" :key="ticket.tid">
+                <td>{{ ticket.tid }}</td>
+                <td>{{ ticket.stop_time }}</td>
+                <td>{{ ticket.posted_speed }}</td>
+                <td>{{ ticket.actual_speed - ticket.posted_speed }}</td>
+                <td>{{ ticket.violator_sex }}</td>
             </tr>
         </table>
     </div>
+</div>
 
-</div> <!-- End of container -->
-
+<!-- Vue.js Script -->
 <script>
-let app = Vue.createApp({
-    data() {     
-        return {
-            tickets: [],           // array to hold ticket data
-        }
-    },
-    created() {      
-        this.getData()  // Load JSON data as page loads
-    },
-    methods: {    
-        async getData() {
-            const response = await fetch('tickets1.json')
-            this.tickets = await response.json()  // Assign data to tickets array
+    let app = Vue.createApp({
+        data() {
+            return {
+                tickets: [],
+            }
         },
-    },
-    computed: {
-        filteredTickets() {
-            // Filter tickets where the actual speed is 25 or more mph over the posted speed
-            return this.tickets.filter(ticket => ticket.actual_speed - ticket.posted_speed >= 25)
+        computed: {
+            // Filter tickets where the difference between actual speed and posted speed is 25 or more
+            filteredTickets() {
+                return this.tickets.filter(ticket => ticket.actual_speed - ticket.posted_speed >= 25);
+            }
+        },
+        created() {
+            this.getData();  // Load JSON data when the page is created
+        },
+        methods: {
+            async getData() {
+                const response = await fetch('tickets1.json');
+                this.tickets = await response.json();
+            },
         }
-    }
-})
+    });
 
-app.mount('#ticketApp')
+    app.mount('#ticketApp');
 </script>
-
 </body>
 </html>
