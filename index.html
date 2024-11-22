@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Speeding Tickets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -9,20 +11,22 @@
 </head>
 <body>
 
-<div class="container">
-    <nav class="navbar navbar-inverse"> <!-- Corrected navbar class -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Our Website</a>
-        </div>
-        <div>
-            <ul>
-                <li class="active"><a href="index.html">All Tickets</a></li>
-                <li><a href="25over.html">25mph or more over</a></li> <!-- Added missing closing tag -->
-            </ul>
-        </div>
-    </nav>
+<!-- Navbar -->
+<nav class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Our Website</a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html">All Tickets</a></li>
+            <li><a href="25over.html">25mph or more over</a></li>
+        </ul>
+    </div>
+</nav>
 
-    <div id="ticketApp"> <!-- Corrected id to match Vue mount point -->
+<!-- Main Content -->
+<div class="container">
+    <div id="ticketApp">
         <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
         <table class="table table-bordered table-striped">
             <tr>
@@ -32,38 +36,38 @@
                 <th>MPH Over</th>
                 <th>Violator Sex</th>
             </tr>
-            <tr v-for="ticket in tickets">
-                <td>{{ticket.tid}}</td>
-                <td>{{ticket.stop_time}}</td>
-                <td>{{ticket.posted_speed}}</td>
-                <td>{{ticket.actual_speed - ticket.posted_speed}}</td> <!-- Corrected formula for speed difference -->
-                <td>{{ticket.violator_sex}}</td> <!-- Corrected property name -->
+            <tr v-for="ticket in tickets" :key="ticket.tid">
+                <td>{{ ticket.tid }}</td>
+                <td>{{ ticket.stop_time }}</td>
+                <td>{{ ticket.posted_speed }}</td>
+                <td>{{ ticket.actual_speed - ticket.posted_speed }}</td>
+                <td>{{ ticket.violator_sex }}</td>
             </tr>
         </table>
-    </div> <!-- End of ticketApp div -->
-</div> <!-- End of container -->
+    </div> 
+</div>
 
+<!-- Vue.js Script -->
 <script>
-let app = Vue.createApp({
-    data() {     
-        return {
-            tickets: [],           // array to hold ticket data
-        }
-    },
-    created() {      
-        this.getData()  // Load JSON data as page loads
-    },
-    methods: {    
-        async getData() {
-            const response = await fetch('tickets1.json')
-            this.tickets = await response.json()  // Assign data to tickets array
+    let app = Vue.createApp({
+        data() {
+            return {
+                tickets: [],
+            }
         },
-    }
-})
+        created() {
+            this.getData();  // Load JSON data when the page is created
+        },
+        methods: {
+            async getData() {
+                const response = await fetch('tickets1.json');
+                this.tickets = await response.json();
+            },
+        }
+    });
 
-app.mount('#ticketApp')   <!-- Corrected mount point -->
+    app.mount('#ticketApp');
 </script>
-
 </body>
 </html>
 
